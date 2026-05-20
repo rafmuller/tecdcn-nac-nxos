@@ -1,0 +1,66 @@
+nxos:
+  devices:
+    - name: spine02
+      url: https://10.15.37.72
+      configuration:
+        system:
+          hostname: spine02
+          mtu: 9216
+        feature:
+          bfd: true
+          bgp: true
+          evpn: true
+          fabric_forwarding: true
+          nv_overlay: true
+          ospf: true
+          pim: true
+          udld: true
+        routing:
+          ospf_processes:
+            - name: "1"
+              router_id: 10.0.0.12
+              areas:
+                - id: 0.0.0.0
+          pim:
+            anycast_rp_local_interface_type: loopback
+            anycast_rp_local_interface_id: "250"
+            anycast_rp_source_interface_type: loopback
+            anycast_rp_source_interface_id: "250"
+            rps:
+              - address: 10.250.250.1
+              - address: 10.250.250.2
+        interfaces:
+          loopbacks:
+            - id: 0
+              description: "Routing Loopback interface"
+              ip:
+                address: 10.0.0.12/32
+              interface_groups:
+                - SPINE_LOOPBACK_INTERFACES
+            - id: 250
+              description: "RP Loopback interface"
+              ip:
+                address: 10.250.250.2/32
+              pim:
+                sparse_mode: true
+              interface_groups:
+                - SPINE_LOOPBACK_INTERFACES
+          ethernets:
+            - id: 1/1
+              interface_groups:
+                - SPINE_FABRIC_INTERFACES
+            - id: 1/2
+              interface_groups:
+                - SPINE_FABRIC_INTERFACES
+            - id: 1/3
+              interface_groups:
+                - SPINE_FABRIC_INTERFACES
+            - id: 1/4
+              interface_groups:
+                - SPINE_FABRIC_INTERFACES
+            - id: 1/5
+              interface_groups:
+                - SPINE_FABRIC_INTERFACES
+            - id: 1/6
+              interface_groups:
+                - SPINE_FABRIC_INTERFACES

@@ -1,0 +1,5 @@
+nxos:
+  global:
+    variables:
+      bgp_asn: 65000
+      anycast_ip: 10.10.101.1

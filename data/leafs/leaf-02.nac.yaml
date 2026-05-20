@@ -1,0 +1,52 @@
+nxos:
+  devices:
+    - name: leaf02
+      url: https://10.15.37.74
+      configuration:
+        system:
+          hostname: leaf02
+          mtu: 9216
+        feature:
+          bfd: true
+          bgp: true
+          evpn: true
+          fabric_forwarding: true
+          nv_overlay: true
+          ospf: true
+          pim: true
+          udld: true
+        routing:
+          ospf_processes:
+            - name: "1"
+              router_id: 10.0.0.22
+              areas:
+                - id: 0.0.0.0
+          pim:
+            anycast_rp_local_interface_type: loopback
+            anycast_rp_local_interface_id: "250"
+            anycast_rp_source_interface_type: loopback
+            anycast_rp_source_interface_id: "250"
+            rps:
+              - address: 10.250.250.1
+              - address: 10.250.250.2
+        interfaces:
+          loopbacks:
+            - id: 0
+              description: "Routing Loopback interface"
+              ip:
+                address: 10.0.0.22/32
+              interface_groups:
+                - LEAF_LOOPBACK_INTERFACES
+            - id: 1
+              description: "VTEP Loopback interface"
+              ip:
+                address: 10.100.100.2/32
+              interface_groups:
+                - LEAF_LOOPBACK_INTERFACES
+          ethernets:
+            - id: 1/47
+              interface_groups:
+                - LEAF_FABRIC_INTERFACES
+            - id: 1/48
+              interface_groups:
+                - LEAF_FABRIC_INTERFACES
