@@ -15,17 +15,8 @@ nxos:
         system:
           hostname: leaf01
           mtu: 9216
-        feature:
-          bfd: true
-          bgp: true
-          evpn: true
-          fabric_forwarding: true
-          nv_overlay: true
-          interface_vlan: true
-          ospf: true
-          pim: true
-          udld: true
-          vpc: true
+        fabric_forwarding:
+          anycast_gateway_mac: 20:20:00:00:10:12
         routing:
           ospf_processes:
             - name: "1"
@@ -40,6 +31,27 @@ nxos:
             rps:
               - address: 10.250.250.1
               - address: 10.250.250.2
+        vrfs:
+          - name: VRF_DVS1
+            description: VRF for DVS1
+            vni: 51000
+            l3vni: true
+            route_distinguisher: auto
+            address_families:
+              - address_family: ipv4-unicast
+                route_target_both_auto: true
+                route_target_both_auto_evpn: true
+              - address_family: ipv6-unicast
+                route_target_both_auto: true
+                route_target_both_auto_evpn: true
+        vlan:
+          vlans:
+            - id: 10
+              name: DVS_VLAN1
+              vni: 20010
+            - id: 20
+              name: DVS_VLAN2
+              vni: 20020
         interfaces:
           loopbacks:
             - id: 0
@@ -56,8 +68,37 @@ nxos:
                   - address: 10.100.101.11/32
               interface_groups:
                 - LEAF_LOOPBACK_INTERFACES
+          nve:
+            vnis:
+              - vni: 20010
+                mcast_group: 239.1.1.1
+              - vni: 20020
+                mcast_group: 239.1.1.1
+          vlans:
+            - id: 10
+              vrf: VRF_DVS1
+              ip:
+                address: 192.168.86.1/24
+              fabric_forwarding_mode: anycast-gw
+            - id: 20
+              vrf: VRF_DVS1
+              ip:
+                address: 192.168.87.1/24
+              fabric_forwarding_mode: anycast-gw
+          port_channels:
+            - id: 10
+              mtu: 9216
+              vpc_id: 11
+              switchport:
+                mode: trunk
+                trunk_allowed_vlans:
+                  ids: 
+                    - 10
+                    - 20
           ethernets:
             - id: 1/1
+              channel_group: 10
+              channel_group_mode: active
               interface_groups:
                 - VMWARE_DVS_STACK1_INTERFACES
             - id: 1/2
@@ -66,9 +107,6 @@ nxos:
             - id: 1/3
               interface_groups:
                 - VMWARE_DVS_STACK1_INTERFACES
-            # - id: 1/46
-            #   interface_groups:
-            #     - VPC_PEER_INTERACE
             - id: 1/47
               interface_groups:
                 - LEAF_FABRIC_INTERFACES

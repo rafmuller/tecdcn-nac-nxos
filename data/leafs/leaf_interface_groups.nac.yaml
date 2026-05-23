@@ -30,21 +30,14 @@ nxos:
       configuration:
         description: "VMware DVS Stack 1 trunk interface"
         mtu: 9216
+        vpc_id: 11
         switchport:
           enabled: true
-
           mode: trunk
+          trunk_allowed_vlans:
+            ids:
+              - 10
+              - 20
         spanning_tree:
           port_type: edge
           bpduguard: true
-
-    - name: VPC_PEER_INTERACE
-      configuration:
-        description: "VPC Peer interface"
-        mtu: 9216
-        medium: p2p
-        switchport:
-          enabled: true
-          mode: trunk
-          
-          
