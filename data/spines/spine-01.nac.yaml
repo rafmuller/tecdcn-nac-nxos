@@ -2,6 +2,10 @@ nxos:
   devices:
     - name: spine01
       url: https://10.15.37.71
+      variables:
+        route_peering_ip: 10.0.0.11
+      device_groups:
+        - SPINES
       configuration:
         system:
           hostname: spine01

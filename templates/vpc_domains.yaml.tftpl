@@ -1,0 +1,50 @@
+vpc:
+  domain_id: ${vpc_domain_id}
+  auto_recovery: true
+  auto_recovery_reload_delay: 240
+  peer_gateway: true
+  peer_switch: true
+  layer3_peer_router: true
+  ip_arp_synchronize: true
+  ipv6_nd_synchronize: true
+  graceful_consistency_check: true
+  peer_link_channel_group: 1
+  keepalive:
+    destination_ip: ${vpc_peer_ip}
+    source_ip: ${vpc_local_ip}
+    vrf: management
+
+interfaces:
+  port_channels:
+    - id: ${vpc_port_channel_id}
+      description: "VPC PEER Link Port Channel"
+      mtu: 1500
+      switchport:
+        mode: trunk
+        trunk_allowed_vlans:
+          ranges:
+            - from: 1
+              to: 4094
+      lacp_min_links: 1
+      lacp_max_bundle: 32
+      lacp_suspend_individual: true
+      spanning_tree:
+        port_type: network
+        guard: none
+
+  ethernets:
+    - id: 1/46
+      description: "VPC PEER Link Interface"
+      vpc_id: ${vpc_domain_id}
+      mtu: 1500
+      channel_group: ${vpc_port_channel_id}
+      channel_group_mode: active
+      switchport:
+        mode: trunk
+        trunk_allowed_vlans:
+          ranges:
+            - from: 1
+              to: 4094
+      spanning_tree:
+        port_type: network
+        guard: none

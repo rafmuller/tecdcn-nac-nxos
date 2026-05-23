@@ -11,6 +11,8 @@ nxos:
     
     - name: LEAF_FABRIC_INTERFACES
       configuration:
+        description: "Leaf fabric interface"
+        mtu: 9216
         switchport:
           enabled: false
         medium: p2p
@@ -22,3 +24,27 @@ nxos:
           network: p2p
         pim:
           sparse_mode: true
+
+
+    - name: VMWARE_DVS_STACK1_INTERFACES
+      configuration:
+        description: "VMware DVS Stack 1 trunk interface"
+        mtu: 9216
+        switchport:
+          enabled: true
+
+          mode: trunk
+        spanning_tree:
+          port_type: edge
+          bpduguard: true
+
+    - name: VPC_PEER_INTERACE
+      configuration:
+        description: "VPC Peer interface"
+        mtu: 9216
+        medium: p2p
+        switchport:
+          enabled: true
+          mode: trunk
+          
+          

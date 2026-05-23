@@ -3,3 +3,28 @@ nxos:
     variables:
       bgp_asn: 65000
       anycast_ip: 10.10.101.1
+
+  device_groups:
+    - name: LEAFS
+      templates: ["leaf-bgp-template", "leaf-nve-interface-template", "leaf-features-template"]
+
+    - name: VPC
+      templates: ["vpc-domain-template"]
+
+
+  templates:
+    - name: leaf-bgp-template
+      type: file
+      file: templates/leaf-bgp.yaml.tftpl
+
+    - name: leaf-nve-interface-template
+      type: file
+      file: templates/leaf-nve-interface.yaml.tftpl
+
+    - name: vpc-domain-template
+      type: file
+      file: templates/vpc_domains.yaml.tftpl
+
+    - name: leaf-features-template
+      type: file
+      file: templates/leaf-features.yaml.tftpl

@@ -11,6 +11,7 @@ nxos:
     
     - name: SPINE_FABRIC_INTERFACES
       configuration:
+        mtu: 9216
         switchport:
           enabled: false
         medium: p2p
