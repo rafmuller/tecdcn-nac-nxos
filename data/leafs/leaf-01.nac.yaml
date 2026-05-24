@@ -52,6 +52,14 @@ nxos:
             - id: 20
               name: DVS_VLAN2
               vni: 20020
+        evpn:
+          vnis:
+            - vni: 20010
+              rd: auto
+              route_target_both_auto: true
+            - vni: 20020
+              rd: auto
+              route_target_both_auto: true
         interfaces:
           loopbacks:
             - id: 0

@@ -3,28 +3,69 @@ nxos:
     variables:
       bgp_asn: 65000
       anycast_ip: 10.10.101.1
+      ospf_area_id: 0.0.0.0
 
   device_groups:
+
+    - name: SPINES
+      templates: ["spine-features"]
+
     - name: LEAFS
       templates: ["leaf-bgp-template", "leaf-nve-interface-template", "leaf-features-template"]
 
     - name: VPC
       templates: ["vpc-domain-template"]
 
+    - name: LEAFS-AUTO
+      templates: 
+        - "leaf-bgp-template"
+        - "leaf-nve-interface-template"
+        - "leaf-features-template"
+        - "leaf-fabric-interfaces-template"
+        - "leaf-ospf-template"
+        - "leaf-pim-template"
+        - "leaf-loopback-interfaces-template"
+        - "leaf-fabric-forwarding-template"
 
+
+        
   templates:
+    - name: spine-features-template
+      type: file
+      file: templates/spines/spine-features.yaml.tftpl
+
     - name: leaf-bgp-template
       type: file
-      file: templates/leaf-bgp.yaml.tftpl
+      file: templates/leafs/bgp.yaml.tftpl
 
     - name: leaf-nve-interface-template
       type: file
-      file: templates/leaf-nve-interface.yaml.tftpl
+      file: templates/leafs/nve-interface.yaml.tftpl
 
     - name: vpc-domain-template
       type: file
-      file: templates/vpc_domains.yaml.tftpl
+      file: templates/leafs/vpc-domains.yaml.tftpl
 
     - name: leaf-features-template
       type: file
-      file: templates/leaf-features.yaml.tftpl
+      file: templates/leafs/features.yaml.tftpl
+
+    - name: leaf-fabric-interfaces-template
+      type: file
+      file: templates/leafs/fabric-interfaces.yaml.tftpl
+
+    - name: leaf-loopback-interfaces-template
+      type: file
+      file: templates/leafs/loopback-interfaces.yaml.tftpl
+
+    - name: leaf-ospf-template
+      type: file
+      file: templates/leafs/ospf.yaml.tftpl
+
+    - name: leaf-pim-template
+      type: file
+      file: templates/leafs/pim.yaml.tftpl
+
+    - name: leaf-fabric-forwarding-template
+      type: file
+      file: templates/leafs/fabric-forwarding.yaml.tftpl
