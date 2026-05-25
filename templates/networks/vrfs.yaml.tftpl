@@ -1,0 +1,15 @@
+vrfs:
+%{ for vrf in vrfs }
+  - name: ${vrf.vrf_name}
+    description: ${try(vrf.vrf_description, "VRF for ${vrf.vrf_name}")}
+    vni: ${vrf.vrf_vni}
+    l3vni: ${try(vrf.vrf_l3vni, true)}
+    route_distinguisher: auto
+    address_families:
+      - address_family: ipv4-unicast
+        route_target_both_auto: true
+        route_target_both_auto_evpn: true
+      - address_family: ipv6-unicast
+        route_target_both_auto: true
+        route_target_both_auto_evpn: true
+%{ endfor }

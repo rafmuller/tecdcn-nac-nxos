@@ -1,0 +1,15 @@
+
+nxos:
+  device_groups:
+    - name: VRF_DVS1
+      devices:
+        - leaf03
+        - leaf04
+      templates:
+        - vrfs-template
+      variables:
+        vrfs:
+          - vrf_name: VRF_DVS1
+            vrf_description: VRF for DVS1
+            vrf_vni: 51000
+            vrf_l3vni: true

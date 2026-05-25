@@ -1,0 +1,39 @@
+
+interfaces:
+  port_channels:
+%{ for port_channel in interface_port_channels }
+    - id: ${port_channel.pc_id}
+      description: "Port Channel ${port_channel.pc_id}"
+      vpc_id: ${port_channel.pc_id}
+      mtu: 9216
+      spanning_tree:
+        port_type: network
+        guard: none
+      switchport:
+        mode: trunk
+        allowed_vlans:
+          ranges:
+            - from: 1
+              to: 4094
+%{ endfor }
+
+
+  ethernets:
+%{ for port_channel in interface_port_channels }
+%{ for port in port_channel.ports }
+    - id: ${port}
+      description: "Port Channel Member of PC: ${port_channel.pc_id}"
+      mtu: 9216
+      channel_group: ${port_channel.pc_id}
+      channel_group_mode: active
+      spanning_tree:
+        port_type: edge
+        bpduguard: true
+      switchport:
+        mode: trunk
+        allowed_vlans:
+          ranges:
+            - from: 1
+              to: 4094
+%{ endfor }
+%{ endfor }

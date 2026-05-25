@@ -4,18 +4,16 @@ nxos:
       bgp_asn: 65000
       anycast_ip: 10.10.101.1
       ospf_area_id: 0.0.0.0
+      l2vni_base: 20000
+      l3vni_base: 50000
 
   device_groups:
-
     - name: SPINES
       templates: ["spine-features"]
-
     - name: LEAFS
       templates: ["leaf-bgp-template", "leaf-nve-interface-template", "leaf-features-template"]
-
     - name: VPC
       templates: ["vpc-domain-template"]
-
     - name: LEAFS-AUTO
       templates: 
         - "leaf-bgp-template"
@@ -26,9 +24,8 @@ nxos:
         - "leaf-pim-template"
         - "leaf-loopback-interfaces-template"
         - "leaf-fabric-forwarding-template"
+        - "leaf-portchannel-interfaces-template"
 
-
-        
   templates:
     - name: spine-features-template
       type: file
@@ -69,3 +66,15 @@ nxos:
     - name: leaf-fabric-forwarding-template
       type: file
       file: templates/leafs/fabric-forwarding.yaml.tftpl
+
+    - name: vrfs-template
+      type: file
+      file: templates/networks/vrfs.yaml.tftpl
+
+    - name: network-template
+      type: file
+      file: templates/networks/networks.yaml.tftpl
+
+    - name: leaf-portchannel-interfaces-template
+      type: file
+      file: templates/leafs/portchannel-interfaces.yaml.tftpl

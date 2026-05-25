@@ -35,9 +35,9 @@ nxos:
           enabled: true
           mode: trunk
           trunk_allowed_vlans:
-            ids:
-              - 10
-              - 20
+            ranges:
+              - from: 1
+                to: 4094
         spanning_tree:
           port_type: edge
           bpduguard: true

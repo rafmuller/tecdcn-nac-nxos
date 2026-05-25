@@ -1,0 +1,23 @@
+
+nxos:
+  device_groups:
+    - name: ENGNET
+      devices:
+        - leaf03
+        - leaf04
+      templates:
+        - network-template
+      variables:
+        networks:
+          - net_name: Net1
+            vrf: VRF_DVS1
+            vlan_name: DVS_VLAN10
+            vlan: 30
+            l2vni: 20030
+            ip: 192.168.88.1/24
+          - net_name: Net2
+            vrf: VRF_DVS1
+            vlan_name: DVS_VLAN10
+            vlan: 40
+            l2vni: 20040
+            ip: 192.168.89.1/24

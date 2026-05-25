@@ -1,0 +1,28 @@
+
+route_maps:
+  - name: fabric-rmap-redist-subnet
+    entries:
+      - order: 10 
+        action: permit
+        match_tags: [12345]
+
+routing:
+  bgp:
+    asn: "${bgp_asn}"
+    address_families:
+      - address_family: l2vpn-evpn
+        advertise_pip: true
+    peer_templates:
+      - name: SPINE-PEERS
+        remote_as: "${bgp_asn}"
+        update_source_interface_type: loopback
+        update_source_interface_id: "0"
+        address_families:
+          - address_family: l2vpn-evpn
+            send_community_standard: true
+            send_community_extended: true
+    neighbors:
+%{ for index, device in [for d in GLOBAL.devices : d if contains(d.device_groups, "SPINES")] }
+      - ip: ${device.variables.route_peering_ip}
+        inherit_peer: SPINE-PEERS
+%{ endfor }

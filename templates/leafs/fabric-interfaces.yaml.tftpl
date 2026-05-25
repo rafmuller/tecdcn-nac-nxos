@@ -1,0 +1,30 @@
+interfaces:
+  ethernets:
+    - id: 1/47
+      description: "Leaf fabric interface"
+      mtu: 9216
+      switchport:
+        enabled: false
+      medium: p2p
+      ip:
+        unnumbered: lo0
+      ospf:
+        process: "1"
+        area: ${ospf_area_id}
+        network: p2p
+      pim:
+        sparse_mode: true
+    - id: 1/48
+      description: "Leaf fabric interface"
+      mtu: 9216
+      switchport:
+        enabled: false
+      medium: p2p
+      ip:
+        unnumbered: lo0
+      ospf:
+        process: "1"
+        area: ${ospf_area_id}
+        network: p2p
+      pim:
+        sparse_mode: true

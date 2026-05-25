@@ -4,10 +4,9 @@ nxos:
       url: https://10.15.37.73
       device_groups:
         - LEAFS
-        - VMWARE_DVS_STACK1
         - VPC
       variables:
-        vpc_domain_id: 11
+        vpc_domain_id: 901
         vpc_local_ip: 10.15.37.73
         vpc_peer_ip: 10.15.37.74
         vpc_port_channel_id: 1
@@ -31,19 +30,24 @@ nxos:
             rps:
               - address: 10.250.250.1
               - address: 10.250.250.2
+          bgp:
+            vrfs:
+              - vrf: VRF_DVS1
+                address_families:
+                  - address_family: ipv4-unicast
+                    redistributions:
+                      - protocol: direct
+                        route_map: fabric-rmap-redist-subnet
+                  - address_family: ipv6-unicast
+                    redistributions:
+                      - protocol: direct
+                        route_map: fabric-rmap-redist-subnet
         vrfs:
           - name: VRF_DVS1
             description: VRF for DVS1
             vni: 51000
             l3vni: true
             route_distinguisher: auto
-            address_families:
-              - address_family: ipv4-unicast
-                route_target_both_auto: true
-                route_target_both_auto_evpn: true
-              - address_family: ipv6-unicast
-                route_target_both_auto: true
-                route_target_both_auto_evpn: true
         vlan:
           vlans:
             - id: 10
@@ -87,6 +91,7 @@ nxos:
               vrf: VRF_DVS1
               ip:
                 address: 192.168.86.1/24
+                tag: 12345
               fabric_forwarding_mode: anycast-gw
             - id: 20
               vrf: VRF_DVS1
@@ -96,13 +101,13 @@ nxos:
           port_channels:
             - id: 10
               mtu: 9216
-              vpc_id: 11
+              vpc_id: 10
               switchport:
                 mode: trunk
                 trunk_allowed_vlans:
-                  ids: 
-                    - 10
-                    - 20
+                  ranges:
+                    - from: 1
+                      to: 4094
           ethernets:
             - id: 1/1
               channel_group: 10
