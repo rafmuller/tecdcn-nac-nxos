@@ -33,6 +33,7 @@ nxos:
           bgp:
             vrfs:
               - vrf: VRF_DVS1
+                enforce_first_as: true
                 address_families:
                   - address_family: ipv4-unicast
                     redistributions:

@@ -20,6 +20,7 @@ interfaces:
       vrf: ${network.vrf}
       ip:
         address: ${network.ip}/24
+        tag: 12345
       fabric_forwarding_mode: anycast-gw
 %{ endfor }
 evpn:

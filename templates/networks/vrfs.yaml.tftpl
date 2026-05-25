@@ -13,3 +13,20 @@ vrfs:
         route_target_both_auto: true
         route_target_both_auto_evpn: true
 %{ endfor }
+
+routing:
+  bgp:
+  %{ for vrf in vrfs }
+    vrfs:
+      - vrf: ${vrf.vrf_name}
+        enforce_first_as: true
+        address_families:
+          - address_family: ipv4-unicast
+            redistributions:
+              - protocol: direct
+                route_map: fabric-rmap-redist-subnet
+          - address_family: ipv6-unicast
+            redistributions:
+              - protocol: direct
+                route_map: fabric-rmap-redist-subnet
+%{ endfor }
