@@ -10,6 +10,7 @@ nxos:
         vpc_local_ip: 10.15.37.74
         vpc_peer_ip: 10.15.37.73
         vpc_port_channel_id: 1
+        routing_loopback_ip: 10.0.0.22
       configuration:
         system:
           hostname: leaf02
@@ -36,10 +37,14 @@ nxos:
                 enforce_first_as: true
                 address_families:
                   - address_family: ipv4-unicast
+                    advertise_l2vpn_evpn: true
+                    maximum_paths: 2
                     redistributions:
                       - protocol: direct
                         route_map: fabric-rmap-redist-subnet
                   - address_family: ipv6-unicast
+                    advertise_l2vpn_evpn: true
+                    maximum_paths: 2
                     redistributions:
                       - protocol: direct
                         route_map: fabric-rmap-redist-subnet
@@ -47,7 +52,7 @@ nxos:
           - name: VRF_DVS1
             description: VRF for DVS1
             vni: 51000
-            l3vni: true
+            # l3vni: true
             route_distinguisher: auto
             address_families:
               - address_family: ipv4-unicast
@@ -64,6 +69,9 @@ nxos:
             - id: 20
               name: DVS_VLAN2
               vni: 20020
+            - id: 2001
+              name: VRF_DVS1_VLAN1
+              vni: 51000
         evpn:
           vnis:
             - vni: 20010
@@ -94,6 +102,8 @@ nxos:
                 mcast_group: 239.1.1.1
               - vni: 20020
                 mcast_group: 239.1.1.1
+              - vni: 51000
+                associate_vrf: true
           vlans:
             - id: 10
               vrf: VRF_DVS1
@@ -106,6 +116,15 @@ nxos:
               ip:
                 address: 192.168.87.1/24
               fabric_forwarding_mode: anycast-gw
+            - id: 2001
+              mtu: 9216
+              vrf: VRF_DVS1
+              ip:
+                forward: true
+                redirects: false
+              ipv6:
+                redirects: false
+                address_use_link_local_only: true
           port_channels:
             - id: 10
               mtu: 9216
@@ -116,18 +135,24 @@ nxos:
                   ranges:
                     - from: 1
                       to: 4094
+              spanning_tree:
+                port_type: edge
+                bpduguard: true
           ethernets:
             - id: 1/1
               channel_group: 10
               channel_group_mode: active
-              interface_groups:
-                - VMWARE_DVS_STACK1_INTERFACES
-            - id: 1/2
-              interface_groups:
-                - VMWARE_DVS_STACK1_INTERFACES
-            - id: 1/3
-              interface_groups:
-                - VMWARE_DVS_STACK1_INTERFACES
+              mtu: 9216
+              switchport:
+                enabled: true
+                mode: trunk
+                trunk_allowed_vlans:
+                  ranges:
+                    - from: 1
+                      to: 4094
+              spanning_tree:
+                port_type: edge
+                bpduguard: true
             - id: 1/47
               interface_groups:
                 - LEAF_FABRIC_INTERFACES

@@ -3,7 +3,7 @@ vrfs:
   - name: ${vrf.vrf_name}
     description: ${try(vrf.vrf_description, "VRF for ${vrf.vrf_name}")}
     vni: ${vrf.vrf_vni}
-    l3vni: ${try(vrf.vrf_l3vni, true)}
+    # l3vni: ${try(vrf.vrf_l3vni, true)}
     route_distinguisher: auto
     address_families:
       - address_family: ipv4-unicast
@@ -14,6 +14,35 @@ vrfs:
         route_target_both_auto_evpn: true
 %{ endfor }
 
+vlan:
+  vlans:
+%{ for vrf in vrfs }
+    - id: ${vrf.vrf_vlan}
+      vni: ${vrf.vrf_vni}
+%{ endfor }
+
+interfaces:
+  vlans:
+%{ for vrf in vrfs }
+    - id: ${vrf.vrf_vlan}
+      vrf: ${vrf.vrf_name}
+      mtu: 9216
+      ip:
+        forward: true
+        redirects: false
+      ipv6:
+        redirects: false
+        address_use_link_local_only: true
+%{ endfor }
+
+  nve:
+   vnis:
+%{ for vrf in vrfs }
+      - vni: ${vrf.vrf_vni}
+        associate_vrf: true
+%{ endfor }
+
+
 routing:
   bgp:
   %{ for vrf in vrfs }
@@ -22,10 +51,14 @@ routing:
         enforce_first_as: true
         address_families:
           - address_family: ipv4-unicast
+            advertise_l2vpn_evpn: true
+            maximum_paths: 2
             redistributions:
               - protocol: direct
                 route_map: fabric-rmap-redist-subnet
           - address_family: ipv6-unicast
+            maximum_paths: 2
+            advertise_l2vpn_evpn: true
             redistributions:
               - protocol: direct
                 route_map: fabric-rmap-redist-subnet

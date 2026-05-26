@@ -8,7 +8,7 @@ vpc:
   ip_arp_synchronize: true
   ipv6_nd_synchronize: true
   graceful_consistency_check: true
-  peer_link_channel_group: 1
+  peer_link_channel_group: ${vpc_port_channel_id}
   keepalive:
     destination_ip: ${vpc_peer_ip}
     source_ip: ${vpc_local_ip}
@@ -35,7 +35,6 @@ interfaces:
   ethernets:
     - id: 1/46
       description: "VPC PEER Link Interface"
-      vpc_id: ${vpc_domain_id}
       mtu: 1500
       channel_group: ${vpc_port_channel_id}
       channel_group_mode: active

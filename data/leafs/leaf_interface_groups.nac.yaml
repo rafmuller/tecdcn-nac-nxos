@@ -30,7 +30,6 @@ nxos:
       configuration:
         description: "VMware DVS Stack 1 trunk interface"
         mtu: 9216
-        vpc_id: 11
         switchport:
           enabled: true
           mode: trunk

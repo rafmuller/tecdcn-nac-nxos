@@ -7,8 +7,8 @@ interfaces:
       vpc_id: ${port_channel.pc_id}
       mtu: 9216
       spanning_tree:
-        port_type: network
-        guard: none
+        port_type: edge
+        bpduguard: true
       switchport:
         mode: trunk
         allowed_vlans:
@@ -24,11 +24,11 @@ interfaces:
     - id: ${port}
       description: "Port Channel Member of PC: ${port_channel.pc_id}"
       mtu: 9216
-      channel_group: ${port_channel.pc_id}
-      channel_group_mode: active
       spanning_tree:
         port_type: edge
         bpduguard: true
+      channel_group: ${port_channel.pc_id}
+      channel_group_mode: active
       switchport:
         mode: trunk
         allowed_vlans:

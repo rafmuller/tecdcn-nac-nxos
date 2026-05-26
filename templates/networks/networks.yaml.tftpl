@@ -1,32 +1,34 @@
-
 vlan:
   vlans:
-%{ for network in networks }
+%{ for network in vxlan_networks }
     - id: ${network.vlan}
-      name: ${try(network.name, "VLAN_${network.vlan}")}
+      name: ${try(network.net_name, "VLAN_${network.vlan}")}
       vni: ${try(network.l2vni, try(l2vni_base, 20000) + network.vlan)}
 %{ endfor }
 
 interfaces:
   nve:
     vnis:
-%{ for network in networks }
-      - vni: ${try(network.l2vni, try(l3vni_base, 30000) + network.vlan)}
+%{ for network in vxlan_networks }
+      - vni: ${try(network.l2vni, try(l3vni_base, 20000) + network.vlan)}
         mcast_group: ${try(network.mcast_group, "239.1.1.1")}
 %{ endfor }
+
   vlans:
-%{ for network in networks }
+%{ for network in vxlan_networks }
     - id: ${network.vlan}
       vrf: ${network.vrf}
       ip:
-        address: ${network.ip}/24
+        address: ${network.ip}
         tag: 12345
       fabric_forwarding_mode: anycast-gw
 %{ endfor }
+
+
 evpn:
   vnis:
-%{ for network in networks }
-    - vni: ${try(network.l2vni, try(l3vni_base, 30000) + network.vlan)}
+%{ for network in vxlan_networks }
+    - vni: ${try(network.l2vni, try(l3vni_base, 20000) + network.vlan)}
       rd: auto
       route_target_both_auto: true
 %{ endfor }

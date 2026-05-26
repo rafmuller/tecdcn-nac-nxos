@@ -9,7 +9,7 @@ nxos:
 
   device_groups:
     - name: SPINES
-      templates: ["spine-features"]
+      templates: ["spine-features", "bgp-spines-template"]
     - name: LEAFS
       templates: ["leaf-bgp-template", "leaf-nve-interface-template", "leaf-features-template"]
     - name: VPC
@@ -25,6 +25,8 @@ nxos:
         - "leaf-loopback-interfaces-template"
         - "leaf-fabric-forwarding-template"
         - "leaf-portchannel-interfaces-template"
+        - "leaf-vrfs-template"
+        - "leaf-networks-template"
 
   templates:
     - name: spine-features-template
@@ -34,6 +36,10 @@ nxos:
     - name: leaf-bgp-template
       type: file
       file: templates/leafs/bgp.yaml.tftpl
+
+    - name: bgp-spines-template
+      type: file
+      file: templates/spines/bgp.yaml.tftpl
 
     - name: leaf-nve-interface-template
       type: file
@@ -67,11 +73,11 @@ nxos:
       type: file
       file: templates/leafs/fabric-forwarding.yaml.tftpl
 
-    - name: vrfs-template
+    - name: leaf-vrfs-template
       type: file
       file: templates/networks/vrfs.yaml.tftpl
 
-    - name: network-template
+    - name: leaf-networks-template
       type: file
       file: templates/networks/networks.yaml.tftpl
 

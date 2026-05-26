@@ -6,18 +6,18 @@ nxos:
         - leaf03
         - leaf04
       templates:
-        - network-template
+        - leaf-networks-template
       variables:
-        networks:
+        vxlan_networks:
           - net_name: Net1
             vrf: VRF_DVS1
-            vlan_name: DVS_VLAN10
+            vlan_name: DVS_VLAN3
             vlan: 30
             l2vni: 20030
             ip: 192.168.88.1/24
           - net_name: Net2
             vrf: VRF_DVS1
-            vlan_name: DVS_VLAN10
+            vlan_name: DVS_VLAN4
             vlan: 40
             l2vni: 20040
             ip: 192.168.89.1/24
