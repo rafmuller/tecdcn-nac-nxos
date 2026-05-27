@@ -11,6 +11,7 @@ interfaces:
     vnis:
 %{ for network in vxlan_networks }
       - vni: ${try(network.l2vni, try(l3vni_base, 20000) + network.vlan)}
+        supress_arp: true
         mcast_group: ${try(network.mcast_group, "239.1.1.1")}
 %{ endfor }
 
@@ -21,6 +22,7 @@ interfaces:
       ip:
         address: ${network.ip}
         tag: 12345
+        redirects: false
       fabric_forwarding_mode: anycast-gw
 %{ endfor }
 

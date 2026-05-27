@@ -53,11 +53,13 @@ routing:
           - address_family: ipv4-unicast
             advertise_l2vpn_evpn: true
             maximum_paths: 2
+            client_to_client_reflection: true
             redistributions:
               - protocol: direct
                 route_map: fabric-rmap-redist-subnet
           - address_family: ipv6-unicast
             maximum_paths: 2
+            client_to_client_reflection: true
             advertise_l2vpn_evpn: true
             redistributions:
               - protocol: direct

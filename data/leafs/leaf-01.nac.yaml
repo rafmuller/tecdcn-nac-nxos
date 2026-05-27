@@ -11,6 +11,7 @@ nxos:
         vpc_peer_ip: 10.15.37.74
         vpc_port_channel_id: 1
         routing_loopback_ip: 10.0.0.21
+        router_id: 10.0.0.21
       configuration:
         system:
           hostname: leaf01
@@ -39,12 +40,14 @@ nxos:
                   - address_family: ipv4-unicast
                     advertise_l2vpn_evpn: true
                     maximum_paths: 2
+                    client_to_client_reflection: true
                     redistributions:
                       - protocol: direct
                         route_map: fabric-rmap-redist-subnet
                   - address_family: ipv6-unicast
                     advertise_l2vpn_evpn: true
                     maximum_paths: 2
+                    client_to_client_reflection: true
                     redistributions:
                       - protocol: direct
                         route_map: fabric-rmap-redist-subnet
@@ -52,7 +55,6 @@ nxos:
           - name: VRF_DVS1
             description: VRF for DVS1
             vni: 51000
-            # l3vni: true
             route_distinguisher: auto
             address_families:
               - address_family: ipv4-unicast
@@ -110,11 +112,13 @@ nxos:
               ip:
                 address: 192.168.86.1/24
                 tag: 12345
+                redirects: false
               fabric_forwarding_mode: anycast-gw
             - id: 20
               vrf: VRF_DVS1
               ip:
                 address: 192.168.87.1/24
+                redirects: false
               fabric_forwarding_mode: anycast-gw
             - id: 2001
               mtu: 9216

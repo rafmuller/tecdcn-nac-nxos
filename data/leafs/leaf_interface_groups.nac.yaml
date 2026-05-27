@@ -5,7 +5,7 @@ nxos:
         ospf:
           process: "1"
           area: 0.0.0.0
-          network: p2p
+          advertise_secondaries: true
         pim:
           sparse_mode: true
     

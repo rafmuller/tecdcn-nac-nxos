@@ -7,7 +7,6 @@ interfaces:
       ospf:
         process: "1"
         area: ${ospf_area_id}
-        network: p2p
       pim:
         sparse_mode: true
     - id: 1
@@ -19,6 +18,6 @@ interfaces:
       ospf:
         process: "1"
         area: ${ospf_area_id}
-        network: p2p
+        advertise_secondaries: true
       pim:
         sparse_mode: true

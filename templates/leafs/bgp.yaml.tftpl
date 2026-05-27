@@ -9,9 +9,10 @@ route_maps:
 routing:
   bgp:
     asn: "${bgp_asn}"
-    address_families:
-      - address_family: l2vpn-evpn
-        advertise_pip: true
+    router_id: ${router_id}
+    suppress_fib_pending: true
+    enforce_first_as: true
+    rd_dual: true
     peer_templates:
       - name: SPINE-PEERS
         remote_as: "${bgp_asn}"
@@ -21,6 +22,10 @@ routing:
           - address_family: l2vpn-evpn
             send_community_standard: true
             send_community_extended: true
+            advertise_l2vpn_evpn: true
+            advertise_gateway_ip: true
+            client_to_client_reflection: true
+            route_reflector_client: true
     neighbors:
 %{ for index, device in [for d in GLOBAL.devices : d if contains(d.device_groups, "SPINES")] }
       - ip: ${device.variables.route_peering_ip}
