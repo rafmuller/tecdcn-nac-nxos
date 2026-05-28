@@ -18,7 +18,7 @@ vlan:
   vlans:
 %{ for vrf in vrfs }
     - id: ${vrf.vrf_vlan}
-      vni: ${vrf.vrf_vni}
+      vn_segment: ${vrf.vrf_vni}
 %{ endfor }
 
 interfaces:

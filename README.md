@@ -32,6 +32,22 @@ This command will download all the required providers and modules from the publi
 
 ## Pre-Change Validation
 
+To write the file for the model, you will need to add the following `write_model_file = "model.yaml"` parameter inside the module definition in the file `main.tf`:
+
+```hcl
+module "nxos" {
+  source  = "netascode/nac-nxos/nxos"
+  version = "0.3.0"
+
+  # yaml_directories     = ["data", "data/spines/", "data/leafs/", "data/networks/"]
+  yaml_directories     = ["data/"]
+  template_directories = ["templates/"]
+
+  write_model_file = "model.yaml"
+}
+
+
+
 ```shell
 terraform apply -target=module.nxos.local_sensitive_file.model
 nac-validate model.yaml

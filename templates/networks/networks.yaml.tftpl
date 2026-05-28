@@ -3,7 +3,7 @@ vlan:
 %{ for network in vxlan_networks }
     - id: ${network.vlan}
       name: ${try(network.net_name, "VLAN_${network.vlan}")}
-      vni: ${try(network.l2vni, try(l2vni_base, 20000) + network.vlan)}
+      vn_segment: ${try(network.l2vni, try(l2vni_base, 20000) + network.vlan)}
 %{ endfor }
 
 interfaces:
@@ -11,7 +11,6 @@ interfaces:
     vnis:
 %{ for network in vxlan_networks }
       - vni: ${try(network.l2vni, try(l3vni_base, 20000) + network.vlan)}
-        supress_arp: true
         mcast_group: ${try(network.mcast_group, "239.1.1.1")}
 %{ endfor }
 

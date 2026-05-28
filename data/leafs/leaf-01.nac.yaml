@@ -25,10 +25,10 @@ nxos:
               areas:
                 - id: 0.0.0.0
           pim:
-            anycast_rp_local_interface_type: loopback
-            anycast_rp_local_interface_id: "250"
-            anycast_rp_source_interface_type: loopback
-            anycast_rp_source_interface_id: "250"
+            # anycast_rp_local_interface_type: loopback
+            # anycast_rp_local_interface_id: "250"
+            # anycast_rp_source_interface_type: loopback
+            # anycast_rp_source_interface_id: "250"
             rps:
               - address: 10.250.250.1
               - address: 10.250.250.2
@@ -67,13 +67,13 @@ nxos:
           vlans:
             - id: 10
               name: DVS_VLAN1
-              vni: 20010
+              vn_segment: 20010
             - id: 20
               name: DVS_VLAN2
-              vni: 20020
+              vn_segment: 20020
             - id: 2001
               name: VRF_DVS1_VLAN1
-              vni: 51000
+              vn_segment: 51000
         evpn:
           vnis:
             - vni: 20010

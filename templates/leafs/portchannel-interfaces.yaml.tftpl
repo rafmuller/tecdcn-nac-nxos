@@ -11,7 +11,7 @@ interfaces:
         bpduguard: true
       switchport:
         mode: trunk
-        allowed_vlans:
+        trunk_allowed_vlans:
           ranges:
             - from: 1
               to: 4094
@@ -31,7 +31,7 @@ interfaces:
       channel_group_mode: active
       switchport:
         mode: trunk
-        allowed_vlans:
+        trunk_allowed_vlans:
           ranges:
             - from: 1
               to: 4094
